@@ -1,13 +1,7 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 from PIL import Image
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM 
-import json
-from PIL import UnidentifiedImageError
-from transformers import pipeline
-from PIL import UnidentifiedImageError
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline 
 import re
 
 st.set_page_config(layout="wide", page_title="Gen Z Image Captioner")

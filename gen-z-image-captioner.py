@@ -12,10 +12,26 @@ st.write(
     "Try uploading an image via the left sidebar to generate a gen-z stylized caption."
 )
 st.write("Created by Grace Alwan, Christine Manegan, and Brennan Megregian. Special thanks to the CS324 class at Stanford University for motivating this project! :grin:")
+st.write("Remember that this captioner is based off of AI - and it doesn’t actually know you! The AI may create captions that do not correctly represent you or your photo, and in that case, we encourage you to try again :smile:")
 st.sidebar.write("## Upload an image to caption :gear:")
+
+@st.cache_resource
+def download_models():
+    #download image captioner
+    image_to_text = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
+
+    #download tokenizer and model
+    tokenizer = AutoTokenizer.from_pretrained("xzyao/HWNWZ5B9AM9PSXV09BAF24ADGP97LMCN2LFQTZJNRQF318SMFM") 
+    model = AutoModelForCausalLM.from_pretrained("xzyao/HWNWZ5B9AM9PSXV09BAF24ADGP97LMCN2LFQTZJNRQF318SMFM")
+    print("downloaded tokenizer + model")
+    return image_to_text, tokenizer, model
+
+
 
 col1, col2 = st.columns(2)
 my_upload = st.sidebar.file_uploader(" ", type=["png", "jpg", "jpeg"])
+
+
 
 def our_awesome_model(upload):
     image = Image.open(upload)
@@ -24,13 +40,7 @@ def our_awesome_model(upload):
     col2.write("Caption :heart_decoration:")
     # insert our pipeline here
     
-    #download image captioner
-    image_to_text = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
-
-    #download tokenizer and model
-    tokenizer = AutoTokenizer.from_pretrained("xzyao/HWNWZ5B9AM9PSXV09BAF24ADGP97LMCN2LFQTZJNRQF318SMFM") 
-    model = AutoModelForCausalLM.from_pretrained("xzyao/HWNWZ5B9AM9PSXV09BAF24ADGP97LMCN2LFQTZJNRQF318SMFM")
-    print("downloaded tokenizer + model")
+    image_to_text, tokenizer, model = download_models()
 
     #get descriptive caption
     plain_text_caption_obj = image_to_text(image)
